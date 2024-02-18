@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:untitled1/resouces/colors.dart';
 import 'package:untitled1/resouces/text.dart';
 import 'package:untitled1/ui/add%20bill/update_bill.dart';
+import 'package:untitled1/ui/pdf%20page/create_pdf.dart';
 
 class PdfPage extends StatefulWidget {
   var data;
@@ -193,7 +194,7 @@ class _PdfPageState extends State<PdfPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-
+            Navigator.push(context, MaterialPageRoute(builder: (context) => CreatePdfPage(data:widget.data),));
         },
         elevation: 10,
         tooltip: "pdf",
