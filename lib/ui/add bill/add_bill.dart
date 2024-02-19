@@ -29,7 +29,6 @@ class _AddBillState extends State<AddBill> {
   String advancedRent,
   String name,
       String totalRent,
-      String pendingRent,
       String dateTime) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -44,7 +43,7 @@ class _AddBillState extends State<AddBill> {
         'items':items,
         'advanced':advancedRent,
         'totalRent':totalRent,
-        'pendingRent':pendingRent,
+        // 'pendingRent':pendingRent,
         'time': DateTime.now(),
         // Add more fields related to the category if needed
       });
@@ -149,16 +148,16 @@ class _AddBillState extends State<AddBill> {
                     prefixText: "₹ "
                 ),
               ),
-              const SizedBox(height: 10,),
-              TextField(
-                controller: _pendingRentController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Pending Rent',
-                  border: OutlineInputBorder(),
-                    prefixText: "₹ "
-                ),
-              ),
+              // const SizedBox(height: 10,),
+              // TextField(
+              //   controller: _pendingRentController,
+              //   keyboardType: TextInputType.number,
+              //   decoration: const InputDecoration(
+              //     labelText: 'Pending Rent',
+              //     border: OutlineInputBorder(),
+              //       prefixText: "₹ "
+              //   ),
+              // ),
               const SizedBox(height: 60,),
               ElevatedButton(
                   onPressed: (){
@@ -173,10 +172,10 @@ class _AddBillState extends State<AddBill> {
                         items.isNotEmpty &&
                         advancedRent.isNotEmpty&&
                         totalRent.isNotEmpty &&
-                        pendingRent.isNotEmpty &&
+                        // pendingRent.isNotEmpty &&
                         dateTime.isNotEmpty)
                     {
-                      addBillToFirestore(addressName, items, advancedRent, name, totalRent, pendingRent, dateTime);
+                      addBillToFirestore(addressName, items, advancedRent, name, totalRent, dateTime);
                       _dateTimeController.clear();
                       _nameController.clear();
                       _addressNameController.clear();

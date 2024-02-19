@@ -30,19 +30,20 @@ class _UpdateDetailsState extends State<UpdateDetails> {
       String name,
       String advancedRent,
       String totalRent,
-      String pendingRent,
       String dateTime) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     try {
       await firestore.collection('Bill').doc(widget.data.id.toString()).update({
         'date': dateTime,
+        'month':picked!.month,
+        'year':picked!.year,
         'name':name,
         'address':addressName,
         'items':items,
         'advanced':advancedRent,
         'totalRent':totalRent,
-        'pendingRent':pendingRent,
+        // 'pendingRent':pendingRent,
         // 'time ': DateTime.now(),
         // Add more fields related to the category if needed
       });
@@ -82,7 +83,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
     _itemController.text = widget.data['items'];
     _advancedRentController.text = widget.data['advanced'];
     _totalRentController.text = widget.data['totalRent'];
-    _pendingRentController.text = widget.data['pendingRent'];
+    // _pendingRentController.text = widget.data['pendingRent'];
     super.initState();
   }
 
@@ -164,16 +165,16 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                       prefixText: "₹ "
                   ),
                 ),
-                const SizedBox(height: 10,),
-                TextField(
-                  controller: _pendingRentController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                      labelText: 'Pending Rent',
-                      border: OutlineInputBorder(),
-                      prefixText: "₹ "
-                  ),
-                ),
+                // const SizedBox(height: 10,),
+                // TextField(
+                //   controller: _pendingRentController,
+                //   keyboardType: TextInputType.number,
+                //   decoration: const InputDecoration(
+                //       labelText: 'Pending Rent',
+                //       border: OutlineInputBorder(),
+                //       prefixText: "₹ "
+                //   ),
+                // ),
                 const SizedBox(height: 60,),
                 ElevatedButton(
                     onPressed: (){
@@ -189,10 +190,10 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                           name.isNotEmpty &&
                           advancedRent.isNotEmpty&&
                           totalRent.isNotEmpty &&
-                          pendingRent.isNotEmpty &&
+                          // pendingRent.isNotEmpty &&
                           dateTime.isNotEmpty)
                       {
-                        updateBillTo(addressName, items,name, advancedRent, totalRent, pendingRent, dateTime);
+                        updateBillTo(addressName, items,name, advancedRent, totalRent, dateTime);
                         _dateTimeController.clear();
                         _addressNameController.clear();
                         _nameController.clear();
