@@ -327,18 +327,24 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
         return pw.Column(
           mainAxisAlignment: pw.MainAxisAlignment.center,
           children: [
-            pw.Text(
-              "Tax Invoice",style: pw.TextStyle(
-              color: PdfColors.black,
-              fontSize: 28,
-              fontWeight: pw.FontWeight.bold
-            )
+            pw.Container(
+              width: double.infinity,
+              color: PdfColor.fromHex("#043C7A"),
+              child: pw.Text(
+                  "Tax Invoice",
+                  textAlign: pw.TextAlign.center,
+                  style: pw.TextStyle(
+                  color: PdfColors.white,
+                  fontSize: 28,
+                  fontWeight: pw.FontWeight.bold
+              )
+              ),
             ),
             pw.SizedBox(height: 50),
-            pw.Divider(
-              thickness: 1,
-              color: PdfColors.black,
-            ),
+            // pw.Divider(
+            //   thickness: 1,
+            //   color: PdfColors.black,
+            // ),
             pw.SizedBox(height: 65),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -472,9 +478,9 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.end,
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('Sub total:', style: boldText),
+                        pw.Text('Sub total :', style: boldText),
                         pw.Text('Received :', style: boldText),
                       ],
                     ),
@@ -499,14 +505,14 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
             pw.SizedBox(height: 5),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.end,
-              crossAxisAlignment: pw.CrossAxisAlignment.end,
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Row(
-                  // crossAxisAlignment: pw.CrossAxisAlignment.end,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
-                    // pw.SizedBox(width: 310),
+                    pw.Container(),
                     pw.Text('Balance :', style: boldText),
-                    pw.SizedBox(width: 40),
+                    pw.SizedBox(width: 54),
                     pw.Text(totalAmount.toString(), style: simpleText),
                   ],
                 ),
