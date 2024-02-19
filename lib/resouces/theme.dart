@@ -123,8 +123,9 @@ abstract class AppTheme {
       iconTheme: IconThemeData(color: AppColor.white),
       foregroundColor: AppColor.transparent,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark,
+        statusBarColor: AppColor.primary,
+        statusBarIconBrightness: Brightness.light,
       ),
       titleTextStyle: TextStyle(
         fontSize: 18,

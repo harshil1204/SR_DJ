@@ -16,6 +16,7 @@ class AddBill extends StatefulWidget {
 class _AddBillState extends State<AddBill> {
 
   final TextEditingController _dateTimeController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressNameController = TextEditingController();
   final TextEditingController _itemController = TextEditingController();
   final TextEditingController _advancedRentController = TextEditingController();
@@ -26,6 +27,7 @@ class _AddBillState extends State<AddBill> {
   void addBillToFirestore(String addressName,
   String items,
   String advancedRent,
+  String name,
       String totalRent,
       String pendingRent,
       String dateTime) async {
@@ -35,12 +37,15 @@ class _AddBillState extends State<AddBill> {
       await firestore.collection('Bill').add({
         // 'id':widget.catId,
         'date': dateTime,
+        'name':name,
+        'month':picked!.month,
+        'year':picked!.year,
         'address':addressName,
         'items':items,
         'advanced':advancedRent,
         'totalRent':totalRent,
         'pendingRent':pendingRent,
-        'time ': DateTime.now(),
+        'time': DateTime.now(),
         // Add more fields related to the category if needed
       });
 
@@ -93,9 +98,6 @@ class _AddBillState extends State<AddBill> {
                 readOnly: true,
                 decoration: const InputDecoration(
                   labelText: 'Choose order Date',
-                  labelStyle: TextStyle(
-                      color: AppColor.primary
-                  ),
                   border: OutlineInputBorder(),
                 ),
                 onTap: (){
@@ -104,12 +106,17 @@ class _AddBillState extends State<AddBill> {
               ),
               const SizedBox(height: 10,),
               TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Customer name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 10,),
+              TextField(
                 controller: _addressNameController,
                 decoration: const InputDecoration(
                   labelText: 'Address',
-                  labelStyle: TextStyle(
-                    color: AppColor.primary
-                  ),
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -156,6 +163,7 @@ class _AddBillState extends State<AddBill> {
               ElevatedButton(
                   onPressed: (){
                     String addressName = _addressNameController.text.trim();
+                    String name = _nameController.text.trim();
                     String items = _itemController.text.trim();
                     String advancedRent = _advancedRentController.text.trim();
                     String totalRent = _totalRentController.text.trim();
@@ -168,8 +176,9 @@ class _AddBillState extends State<AddBill> {
                         pendingRent.isNotEmpty &&
                         dateTime.isNotEmpty)
                     {
-                      addBillToFirestore(addressName, items, advancedRent, totalRent, pendingRent, dateTime);
+                      addBillToFirestore(addressName, items, advancedRent, name, totalRent, pendingRent, dateTime);
                       _dateTimeController.clear();
+                      _nameController.clear();
                       _addressNameController.clear();
                       _itemController.clear();
                       _advancedRentController.clear();

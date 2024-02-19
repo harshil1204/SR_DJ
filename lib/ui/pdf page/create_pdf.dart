@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:untitled1/resouces/colors.dart';
 
 class CreatePdfPage extends StatefulWidget {
   var data;
@@ -33,11 +34,30 @@ pw.TextStyle boldText = pw.TextStyle(
   fontWeight: pw.FontWeight.bold,
   fontSize: 14,
 );
+pw.TextStyle boldTextTitle = pw.TextStyle(
+  color: PdfColors.white,
+  fontWeight: pw.FontWeight.bold,
+  fontSize: 14,
+);
 
 pw.TextStyle simpleText = const pw.TextStyle(
   color: PdfColors.black,
   fontSize: 14,
 );
+
+pw.Widget buildTitles(var data){
+  return pw.Padding(
+    padding: const pw.EdgeInsets.symmetric(horizontal: 7,vertical: 3),
+    child: pw.Text(data, style: boldTextTitle),
+  );
+}
+
+pw.Widget buildItems(var data,int value){
+  return pw.Padding(
+    padding: const pw.EdgeInsets.symmetric(horizontal: 7,vertical: 2),
+    child: pw.Text(data, style: simpleText),
+  );
+}
 
 Future<Uint8List> generateCenteredText(var data) async {
   final pdf = pw.Document();
@@ -307,7 +327,19 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
         return pw.Column(
           mainAxisAlignment: pw.MainAxisAlignment.center,
           children: [
-            pw.Spacer(),
+            pw.Text(
+              "Tax Invoice",style: pw.TextStyle(
+              color: PdfColors.black,
+              fontSize: 28,
+              fontWeight: pw.FontWeight.bold
+            )
+            ),
+            pw.SizedBox(height: 50),
+            pw.Divider(
+              thickness: 1,
+              color: PdfColors.black,
+            ),
+            pw.SizedBox(height: 65),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -381,17 +413,16 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                         pw.Text('Invoice :', style: boldText),
                         pw.Text('Date of Issue :', style: boldText),
                         pw.Text('Order Date :', style: boldText),
-                        // pw.Text('Balance :', style: boldText),
-                        // pw.Text('Currency :', style: boldText),
                       ],
                     ),
                     pw.SizedBox(width: 20),
                     pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.start,
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('hello', style: simpleText),
-                        pw.Text('${currentDate.day-currentDate.month}', style: simpleText),
-                        pw.Text('hello', style: simpleText),
+                        pw.Text('01', style: simpleText),
+                        pw.Text('${currentDate.day}-${currentDate.month}-${currentDate.year}', style: simpleText),
+                        pw.Text(data['date'], style: simpleText),
                       ],
                     ),
                   ],
@@ -399,67 +430,37 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
               ],
             ),
             pw.SizedBox(height: 50),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Container(
-                  width: 110,
-                  child: pw.Text('Date', style: boldText),
+            pw.Table(
+              columnWidths: {
+                0:const pw.FixedColumnWidth(80),
+                1:const pw.FixedColumnWidth(120),
+                2:const pw.FixedColumnWidth(120),
+                5:const pw.FixedColumnWidth(40),
+              },
+                border: pw.TableBorder.all(color: PdfColor.fromHex("#043C7A")),
+                tableWidth: pw.TableWidth.max,
+              children:<pw.TableRow> [
+                pw.TableRow(
+                  decoration: pw.BoxDecoration(
+                    color: PdfColor.fromHex("#043C7A")
+                  ),
+                  children: [
+                    buildTitles('Date'),
+                    buildTitles('Items'),
+                    buildTitles('Address'),
+                    buildTitles('Amount'),
+                  ]
                 ),
-                pw.Container(
-                  width: 110,
-                  child: pw.Text('Items', style: boldText),
-                ),
-                pw.Container(
-                  width: 110,
-                  child: pw.Text('Address', style: boldText),
-                ),
-                pw.Container(
-                  width: 50,
-                  child: pw.Text('Total Rent', style: boldText),
-                ),
-                // pw.Container(
-                //   width: 70,
-                //   child: pw.Text('Advanced amount', style: boldText),
-                // ),
-                // pw.Container(
-                //   width: 70,
-                //   child: pw.Text('Pending amount', style: boldText),
-                // ),
-              ],
-            ),
-            pw.SizedBox(height: 10),
-            pw.Divider(
-              thickness: 2,
-              color: PdfColors.black,
-            ),
-            pw.SizedBox(height: 20),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Container(
-                  width: 110,
-                  child: pw.Text(data['date'].toString(),
-                      style: simpleText),
-                ),
-                pw.Container(
-                  width: 110,
-                  child: pw.Text(data['items'].toString(), style: simpleText),
-                ),
-                pw.Container(
-                  width: 50,
-                  child: pw.Text(data['address'].toString(), style: simpleText),
-                ),
-                pw.Container(
-                  width: 50,
-                  child: pw.Text(data['totalRent'].toString(), style: simpleText),
-                ),
-              ],
-            ),
-            pw.SizedBox(height: 10),
-            pw.Divider(
-              thickness: 1,
-              color: PdfColors.grey,
+                pw.TableRow(
+                 verticalAlignment: pw.TableCellVerticalAlignment.full,
+                  children: [
+                    buildItems(data['date'],0),
+                    buildItems(data['items'],0),
+                    buildItems(data['address'],0),
+                    buildItems(data['totalRent'],1),
+                  ]
+                )
+              ]
             ),
             pw.SizedBox(height: 30),
             pw.Row(
@@ -471,41 +472,41 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      crossAxisAlignment: pw.CrossAxisAlignment.end,
                       children: [
-                        pw.Text('Advanced amount:', style: boldText),
-                        pw.Text('Pending amount :', style: boldText),
+                        pw.Text('Sub total:', style: boldText),
+                        pw.Text('Received :', style: boldText),
                       ],
                     ),
-                    pw.SizedBox(width: 20),
+                    pw.SizedBox(width: 40),
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
+                        pw.Text(data['totalRent'].toString(), style: simpleText),
                         pw.Text(data['advanced'].toString(), style: simpleText),
-                        pw.Text(data['pendingRent'].toString(), style: simpleText),
                       ],
                     ),
                   ],
                 ),
               ],
             ),
-            pw.SizedBox(height: 10),
+            pw.SizedBox(height: 5),
             pw.Divider(
               thickness: 1,
               color: PdfColors.black,
-              indent: 300,
+              indent: 330,
             ),
-            pw.SizedBox(height: 10),
+            pw.SizedBox(height: 5),
             pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: pw.MainAxisAlignment.end,
               crossAxisAlignment: pw.CrossAxisAlignment.end,
               children: [
                 pw.Row(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  // crossAxisAlignment: pw.CrossAxisAlignment.end,
                   children: [
-                    pw.SizedBox(width: 310),
+                    // pw.SizedBox(width: 310),
                     pw.Text('Balance :', style: boldText),
-                    pw.SizedBox(width: 58),
+                    pw.SizedBox(width: 40),
                     pw.Text(totalAmount.toString(), style: simpleText),
                   ],
                 ),
@@ -520,7 +521,7 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
             pw.Align(
               alignment: pw.Alignment.bottomCenter,
               child: pw.Text(
-                'Thanks harshil for you order!',
+                'Thanks ${data['name'].split(' ')[0]} for you order!',
                 style: const pw.TextStyle(
                   fontSize: 19,
                   color: PdfColors.black,

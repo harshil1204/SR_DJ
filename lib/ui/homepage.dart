@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled1/resouces/colors.dart';
 import 'package:untitled1/resouces/text.dart';
-
-import 'add bill/add_bill.dart';
-import 'pdf page/pdf_page.dart';
+import 'package:untitled1/ui/add%20bill/bill_list.dart';
+import 'package:untitled1/ui/drawer/drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,68 +12,55 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String> month=["01-01","01-02","01-03","01-04","01-05","01-06","01-07","01-08","01-09","01-10","01-11","01-12"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
         title: const CommonText.extraBold("Homepage",size: 18,),
+        // actions: [
+        //   IconButton(
+        //       onPressed: (){},
+        //       icon: const Icon(Icons.date_range)
+        //   ),
+        // ],
       ),
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('Bill').orderBy("time ",descending: true).snapshots(),
-          builder: (context, snapshot) {
-            if(snapshot.hasData){
-              return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var data=snapshot.data!.docs[index];
-                    return InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => PdfPage(data:data),));
-                      },
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 7,vertical: 5),
-                        elevation: 6,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                          decoration: const BoxDecoration(
-                          color: AppColor.white,
-                          ),
-                          child: Column(
-                            children: [
-                              customRow(data,"Address : "),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-              );
-            }
-            else{
-              return const Center(
-                  child: CommonText.semiBold("No data found",size: 18,));
-              }
+      drawer: const DrawerCustom(),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 12, 8, 2),
+        child: GridView.builder(
+          itemCount: 12,
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()
+          ),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10),
+          itemBuilder: (context, index) {
+            return InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => BillList(name:month[index].toString(),month:index+1)));
+              },
+              child: Card(
+                color: AppColor.white,
+                elevation: 10,
+                shape:OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: AppColor.white
+                    ),
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                child: Center(
+                  child: CommonText.semiBold(month[index].toString(),color: AppColor.primary,size: 18,),
+                ),
+              ),
+            );
           },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddBill(),));
-        },
-        tooltip: "Add bill",
-        elevation: 0.5,
-        child: const Icon(Icons.add),
+        )
       ),
     );
   }
 }
 
-
-Widget customRow(var data,String name){
-  return Row(
-    children: [
-      Expanded(child: CommonText.semiBold(name.toString(),color: AppColor.primary,size: 18,)),
-      Expanded(child: CommonText.semiBold(data['address'].toString(),color: AppColor.primary,size: 18,)),
-    ],
-  );
-}

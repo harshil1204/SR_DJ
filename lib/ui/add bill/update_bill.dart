@@ -17,6 +17,7 @@ class UpdateDetails extends StatefulWidget {
 class _UpdateDetailsState extends State<UpdateDetails> {
 
   final TextEditingController _dateTimeController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _addressNameController = TextEditingController();
   final TextEditingController _itemController = TextEditingController();
   final TextEditingController _advancedRentController = TextEditingController();
@@ -26,6 +27,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
 
   void updateBillTo(String addressName,
       String items,
+      String name,
       String advancedRent,
       String totalRent,
       String pendingRent,
@@ -35,6 +37,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
     try {
       await firestore.collection('Bill').doc(widget.data.id.toString()).update({
         'date': dateTime,
+        'name':name,
         'address':addressName,
         'items':items,
         'advanced':advancedRent,
@@ -44,7 +47,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
         // Add more fields related to the category if needed
       });
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage(),));
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomePage(),),(route) => false,);
     } catch (e) {
       if (kDebugMode) {
         print('Error adding category: $e');
@@ -74,6 +77,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
   @override
   void initState() {
     _dateTimeController.text = widget.data['date'];
+    _nameController.text = widget.data['name'];
     _addressNameController.text = widget.data['address'];
     _itemController.text = widget.data['items'];
     _advancedRentController.text = widget.data['advanced'];
@@ -108,6 +112,17 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                   onTap: (){
                     _selectDate(context);
                   },
+                ),
+                const SizedBox(height: 10,),
+                TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'customer Name',
+                    labelStyle: TextStyle(
+                        color: AppColor.primary
+                    ),
+                    border: OutlineInputBorder(),
+                  ),
                 ),
                 const SizedBox(height: 10,),
                 TextField(
@@ -164,20 +179,23 @@ class _UpdateDetailsState extends State<UpdateDetails> {
                     onPressed: (){
                       String addressName = _addressNameController.text.trim();
                       String items = _itemController.text.trim();
+                      String name = _nameController.text.trim();
                       String advancedRent = _advancedRentController.text.trim();
                       String totalRent = _totalRentController.text.trim();
                       String pendingRent = _pendingRentController.text.trim();
                       String dateTime = _dateTimeController.text.trim();
                       if(addressName.isNotEmpty &&
                           items.isNotEmpty &&
+                          name.isNotEmpty &&
                           advancedRent.isNotEmpty&&
                           totalRent.isNotEmpty &&
                           pendingRent.isNotEmpty &&
                           dateTime.isNotEmpty)
                       {
-                        updateBillTo(addressName, items, advancedRent, totalRent, pendingRent, dateTime);
+                        updateBillTo(addressName, items,name, advancedRent, totalRent, pendingRent, dateTime);
                         _dateTimeController.clear();
                         _addressNameController.clear();
+                        _nameController.clear();
                         _itemController.clear();
                         _advancedRentController.clear();
                         _totalRentController.clear();

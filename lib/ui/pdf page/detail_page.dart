@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled1/resouces/colors.dart';
 import 'package:untitled1/resouces/text.dart';
 import 'package:untitled1/ui/add%20bill/update_bill.dart';
+import 'package:untitled1/ui/homepage.dart';
 import 'package:untitled1/ui/pdf%20page/create_pdf.dart';
 
 class PdfPage extends StatefulWidget {
@@ -13,6 +15,18 @@ class PdfPage extends StatefulWidget {
 }
 
 class _PdfPageState extends State<PdfPage> {
+
+  void deleteBill(String catId) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      await firestore.collection('Bill').doc(catId).delete();
+      print('Bill deleted successfully');
+      Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => HomePage(),),(route) => false,); // Close the dialog after deletion
+    } catch (e) {
+      print('Error deleting product: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +39,12 @@ class _PdfPageState extends State<PdfPage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateDetails(data: widget.data),));
               },
               icon: const Icon(Icons.edit,)
+          ),
+          IconButton(
+              onPressed: (){
+                deleteBill(widget.data.id.toString());
+                },
+              icon: const Icon(Icons.delete,)
           )
         ],
       ),
@@ -41,6 +61,7 @@ class _PdfPageState extends State<PdfPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
                   width: double.infinity,
                   decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(topRight: Radius.circular(10),bottomLeft: Radius.circular(10)),
                       border: Border.all(
                           color: AppColor.primary,
                           width: 1
