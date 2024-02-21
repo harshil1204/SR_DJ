@@ -20,7 +20,8 @@ class _PdfPageState extends State<PdfPage> {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
       await firestore.collection('Bill').doc(catId).delete();
-      print('Bill deleted successfully');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('data deleted successfully.')));
       Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context) => HomePage(),),(route) => false,); // Close the dialog after deletion
     } catch (e) {
       print('Error deleting product: $e');
@@ -137,16 +138,16 @@ class _PdfPageState extends State<PdfPage> {
                           Expanded(child: CommonText.extraBold("₹ ${widget.data['advanced'].toString()}",size: 18,color: AppColor.black,)),
                         ],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12.0),
-                        child: Divider(color: AppColor.primary),
-                      ),
-                      Row(
-                        children: [
-                          const Expanded(child: CommonText.extraBold("Pending :",size: 18,color: AppColor.black,)),
-                          Expanded(child: CommonText.extraBold("₹ ${widget.data['pendingRent'].toString()}",size: 18,color: AppColor.black,)),
-                        ],
-                      ),
+                      // const Padding(
+                      //   padding: EdgeInsets.symmetric(vertical: 12.0),
+                      //   child: Divider(color: AppColor.primary),
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     const Expanded(child: CommonText.extraBold("Pending :",size: 18,color: AppColor.black,)),
+                      //     Expanded(child: CommonText.extraBold("₹ ${widget.data['pendingRent'].toString()}",size: 18,color: AppColor.black,)),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),

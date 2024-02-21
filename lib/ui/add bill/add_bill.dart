@@ -22,6 +22,7 @@ class _AddBillState extends State<AddBill> {
   final TextEditingController _advancedRentController = TextEditingController();
   final TextEditingController _totalRentController = TextEditingController();
   final TextEditingController _pendingRentController = TextEditingController();
+
   DateTime? picked;
 
   void addBillToFirestore(String addressName,
@@ -161,6 +162,7 @@ class _AddBillState extends State<AddBill> {
               const SizedBox(height: 60,),
               ElevatedButton(
                   onPressed: (){
+                    FocusScope.of(context).focusedChild?.unfocus();
                     String addressName = _addressNameController.text.trim();
                     String name = _nameController.text.trim();
                     String items = _itemController.text.trim();
@@ -185,6 +187,10 @@ class _AddBillState extends State<AddBill> {
                       _pendingRentController.clear();
                       ScaffoldMessenger.of(context)
                           .showSnackBar(const SnackBar(content: Text('data added successfully.')));
+                    }
+                    else{
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(content: Text('please fill the boxes')));
                     }
                   },
                   child: const SizedBox(

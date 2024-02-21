@@ -10,7 +10,8 @@ import 'add_bill.dart';
 class BillList extends StatefulWidget {
   String? name;
   int? month;
-   BillList({super.key,this.name,this.month});
+  int? year;
+  BillList({super.key,this.name,this.month,this.year});
 
   @override
   State<BillList> createState() => _BillListState();
@@ -22,17 +23,20 @@ class _BillListState extends State<BillList> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: CommonText.extraBold(widget.name.toString(),size: 18,),
+        title: CommonText.extraBold("${widget.name}-${widget.year}".toString(),size: 18,),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('Bill')
             .where('month',isEqualTo: widget.month)
-            .where('year',isEqualTo: 2024)
+            .where('year',isEqualTo: widget.year)
             .orderBy('time',descending: true).snapshots(),
         builder: (context, snapshot) {
           if(snapshot.hasData){
             return ListView.builder(
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()
+              ),
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 var data=snapshot.data!.docs[index];
@@ -41,19 +45,21 @@ class _BillListState extends State<BillList> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => PdfPage(data:data),));
                   },
                   child: Card(
+                    clipBehavior: Clip.hardEdge,
                     margin: const EdgeInsets.symmetric(horizontal: 7,vertical: 5),
-                    elevation: 14,
+                    elevation: 0,
                     child: Container(
+                      clipBehavior: Clip.hardEdge,
                       padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                      decoration: const BoxDecoration(
-                        color: AppColor.white,
+                      decoration: BoxDecoration(
+                        color: AppColor.darkBoxBg,
                       ),
                       child: Column(
                         children: [
                           customRow(data['date'],"date : "),
-                          const Divider(),
+                         // const Divider(color: AppColor.black,thickness: 0.2),
                           customRow(data['address'],"Address : "),
-                          const Divider(),
+                          //const Divider(color: AppColor.black,thickness: 0.2),
                           customRow(data['items'],"Items : "),
                         ],
                       ),
@@ -65,7 +71,7 @@ class _BillListState extends State<BillList> {
           }
           else{
             return const Center(
-                child: CommonText.semiBold("No data found",size: 18,color: AppColor.primary,));
+                child: CircularProgressIndicator());
           }
         },
       ),

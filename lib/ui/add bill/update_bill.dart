@@ -36,8 +36,8 @@ class _UpdateDetailsState extends State<UpdateDetails> {
     try {
       await firestore.collection('Bill').doc(widget.data.id.toString()).update({
         'date': dateTime,
-        'month':picked!.month,
-        'year':picked!.year,
+        'month':picked?.month,
+        'year':picked?.year,
         'name':name,
         'address':addressName,
         'items':items,
@@ -48,7 +48,7 @@ class _UpdateDetailsState extends State<UpdateDetails> {
         // Add more fields related to the category if needed
       });
 
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomePage(),),(route) => false,);
+      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomePage(),),(route) => false,);
     } catch (e) {
       if (kDebugMode) {
         print('Error adding category: $e');
@@ -74,9 +74,11 @@ class _UpdateDetailsState extends State<UpdateDetails> {
     setState(() {
     });
   }
+  DateFormat format = new DateFormat("dd-MM-yyyy");
 
   @override
   void initState() {
+     picked=format.parse(widget.data['date']);
     _dateTimeController.text = widget.data['date'];
     _nameController.text = widget.data['name'];
     _addressNameController.text = widget.data['address'];

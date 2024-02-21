@@ -2,10 +2,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:number_to_words_english/number_to_words_english.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:untitled1/resouces/colors.dart';
+
+var formatter = NumberFormat('#,##,000');
 
 class CreatePdfPage extends StatefulWidget {
   var data;
@@ -23,6 +26,7 @@ class _CreatePdfPageState extends State<CreatePdfPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       body:  PdfPreview(
+        pdfFileName: "SR Sounds",
         build: (format) => generateCenteredTextWithOriginal(widget.data),
       )
     );
@@ -463,7 +467,10 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                     buildItems(data['date'],0),
                     buildItems(data['items'],0),
                     buildItems(data['address'],0),
-                    buildItems(data['totalRent'],1),
+                pw.Padding(
+                  padding: const pw.EdgeInsets.symmetric(horizontal: 7,vertical: 2),
+                  child: pw.Text(formatter.format(int.parse(data['totalRent'])), style: simpleText),
+                      )
                   ]
                 )
               ]
@@ -488,8 +495,8 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text(data['totalRent'].toString(), style: simpleText),
-                        pw.Text(data['advanced'].toString(), style: simpleText),
+                        pw.Text(formatter.format(int.parse(data['totalRent'])), style: simpleText),
+                        pw.Text(formatter.format(int.parse(data['advanced'])), style: simpleText),
                       ],
                     ),
                   ],
@@ -513,10 +520,41 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                     pw.Container(),
                     pw.Text('Balance :', style: boldText),
                     pw.SizedBox(width: 54),
-                    pw.Text(totalAmount.toString(), style: simpleText),
+                    pw.Text(formatter.format(totalAmount), style: simpleText),
                   ],
                 ),
               ],
+            ),
+            pw.SizedBox(height: 40),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.end,
+              children: [
+                pw.Table(
+                    border: pw.TableBorder.all(color: PdfColor.fromHex("#043C7A")),
+                    tableWidth: pw.TableWidth.max,
+                  children: [
+                    pw.TableRow(
+                        decoration: pw.BoxDecoration(
+                            color: PdfColor.fromHex("#043C7A")
+                        ),
+                        children: [
+                          pw.Padding(
+                            padding: const pw.EdgeInsets.symmetric(horizontal: 12),
+                            child: pw.Text("Invoice Amount In words",style: boldTextTitle),
+                          )
+                        ]
+                    ),
+                    pw.TableRow(
+                        children: [
+                          pw.Padding(
+                              padding: const pw.EdgeInsets.symmetric(horizontal: 6),
+                              child: pw.Center(child: pw.Text("${NumberToWordsEnglish.convert(totalAmount)} only",style: simpleText))
+                          ),
+                        ]
+                    ),
+                  ]
+                ),
+              ]
             ),
             pw.Spacer(),
             pw.Divider(
