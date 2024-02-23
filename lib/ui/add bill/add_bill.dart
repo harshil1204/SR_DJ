@@ -44,7 +44,9 @@ class _AddBillState extends State<AddBill> {
         'items':items,
         'advanced':advancedRent,
         'totalRent':totalRent,
-        // 'pendingRent':pendingRent,
+        'tempaRent':0,
+        'operatorCost':0,
+        'extraCost':0,
         'time': DateTime.now(),
         // Add more fields related to the category if needed
       });

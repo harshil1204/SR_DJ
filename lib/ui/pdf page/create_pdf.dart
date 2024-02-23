@@ -566,9 +566,9 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
               alignment: pw.Alignment.bottomCenter,
               child: pw.Text(
                 'Thanks ${data['name'].split(' ')[0]} for you order!',
-                style: const pw.TextStyle(
+                style: pw.TextStyle(
                   fontSize: 19,
-                  color: PdfColors.black,
+                  color: PdfColor.fromHex("#043C7A")
                 ),
               ),
             ),

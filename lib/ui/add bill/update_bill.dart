@@ -43,9 +43,9 @@ class _UpdateDetailsState extends State<UpdateDetails> {
         'items':items,
         'advanced':advancedRent,
         'totalRent':totalRent,
-        // 'pendingRent':pendingRent,
-        // 'time ': DateTime.now(),
-        // Add more fields related to the category if needed
+        'tempaRent':0,
+        'operatorCost':0,
+        'extraCost':0,
       });
 
       // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomePage(),),(route) => false,);

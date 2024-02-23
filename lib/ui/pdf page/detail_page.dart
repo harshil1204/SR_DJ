@@ -43,7 +43,27 @@ class _PdfPageState extends State<PdfPage> {
           ),
           IconButton(
               onPressed: (){
-                deleteBill(widget.data.id.toString());
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        actionsAlignment: MainAxisAlignment.center,
+                        title: const CommonText.semiBold("Do you really want to delete ?",size:17,color: AppColor.primary,),
+                        actions: [
+                          ElevatedButton(
+                              onPressed: (){
+                                Navigator.pop(context);
+                              },
+                              child: const CommonText.semiBold("cancel",size: 15,)),
+                          ElevatedButton(
+                              onPressed: (){
+                                deleteBill(widget.data.id.toString());
+                              },
+                              child: const CommonText.semiBold("delete",size: 15,))
+                        ],
+                      );
+                    },);
+
                 },
               icon: const Icon(Icons.delete,)
           )
