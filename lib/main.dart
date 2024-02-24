@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'SR sound',
       theme: AppTheme.theme,
       debugShowCheckedModeBanner: false,
       home: const SplashScreen(),

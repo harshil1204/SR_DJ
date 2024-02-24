@@ -25,8 +25,8 @@ class _CreatePdfPageState extends State<CreatePdfPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body:  PdfPreview(
-        pdfFileName: "SR Sounds",
+      body: PdfPreview(
+        pdfFileName: "SR Sounds.pdf",
         build: (format) => generateCenteredTextWithOriginal(widget.data),
       )
     );
@@ -331,6 +331,7 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
         return pw.Column(
           mainAxisAlignment: pw.MainAxisAlignment.center,
           children: [
+            pw.Spacer(),
             pw.Container(
               width: double.infinity,
               color: PdfColor.fromHex("#043C7A"),
