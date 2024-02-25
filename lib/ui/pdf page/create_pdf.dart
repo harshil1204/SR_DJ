@@ -1,5 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +28,11 @@ class _CreatePdfPageState extends State<CreatePdfPage> {
       backgroundColor: Colors.black,
       body: PdfPreview(
         pdfFileName: "SR Sounds.pdf",
+        onShared: (context){
+          if (kDebugMode) {
+            print('shared');
+          }
+        },
         build: (format) => generateCenteredTextWithOriginal(widget.data),
       )
     );
@@ -63,268 +69,12 @@ pw.Widget buildItems(var data,int value){
   );
 }
 
-Future<Uint8List> generateCenteredText(var data) async {
-  final pdf = pw.Document();
-  final image = pw.MemoryImage
-    ((await rootBundle.load('assets/images/srdj.png')).buffer.asUint8List());
-  pdf.addPage(
-    pw.Page(
-      build: (pw.Context context) {
-        return pw.Column(
-          mainAxisAlignment: pw.MainAxisAlignment.center,
-          children: [
-            pw.Spacer(),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text('From :', style: boldText),
-                    pw.SizedBox(height: 10),
-                    pw.Text('sr dj souds', style: simpleText),
-                    pw.Container(
-                      width: 200,
-                      child: pw.Text('surat', style: simpleText),
-                    ),
-                    pw.Text('india,', style: simpleText),
-                    pw.Text('srdj@gmail.com,', style: simpleText),
-                  ],
-                ),
-                pw.Row(
-                  children: [
-                    pw.Container(
-                      height: 60,
-                      width: 60,
-                      color: PdfColors.black,
-                      child: pw.Image(image, fit: pw.BoxFit.cover),
-                    ),
-                    pw.SizedBox(width: 10),
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text(
-                          'srdj',
-                          style: pw.TextStyle(
-                            color: PdfColors.black,
-                            fontWeight: pw.FontWeight.bold,
-                            fontSize: 25,
-                          ),
-                        ),
-                        pw.Text(
-                          'srdj',
-                          style: const pw.TextStyle(
-                            color: PdfColors.black,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            pw.SizedBox(height: 25),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: pw.CrossAxisAlignment.end,
-              children: [
-                pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text('To :', style: boldText),
-                    pw.SizedBox(height: 10),
-                    pw.Text('dhruv', style: simpleText),
-                    pw.Container(
-                      width: 200,
-                      child: pw.Text('suarta', style: simpleText),
-                    ),
-                    pw.Text('india', style: simpleText),
-                    pw.Text('srdj@', style: simpleText),
-                  ],
-                ),
-                pw.Row(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text('Invoice # :', style: boldText),
-                        pw.Text('Date of Issue :', style: boldText),
-                        pw.Text('Due Date :', style: boldText),
-                        pw.Text('Balance :', style: boldText),
-                        pw.Text('Currency :', style: boldText),
-                      ],
-                    ),
-                    pw.SizedBox(width: 20),
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text('hello', style: simpleText),
-                        pw.Text('hello', style: simpleText),
-                        pw.Text('hello', style: simpleText),
-                        pw.Text('hello', style: simpleText),
-                        pw.Text('hello', style: simpleText),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            pw.SizedBox(height: 50),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Container(
-                  width: 110,
-                  child: pw.Text('Product/Service', style: boldText),
-                ),
-                pw.Container(
-                  width: 100,
-                  child: pw.Text('Description', style: boldText),
-                ),
-                pw.Container(
-                  width: 50,
-                  child: pw.Text('Price', style: boldText),
-                ),
-                pw.Container(
-                  width: 50,
-                  child: pw.Text('QTY', style: boldText),
-                ),
-                pw.Container(
-                  width: 70,
-                  child: pw.Text('Discount', style: boldText),
-                ),
-                pw.Container(
-                  width: 70,
-                  child: pw.Text('Total', style: boldText),
-                ),
-              ],
-            ),
-            pw.SizedBox(height: 10),
-            pw.Divider(
-              thickness: 2,
-              color: PdfColors.black,
-            ),
-            pw.SizedBox(height: 20),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Container(
-                  width: 110,
-                  child: pw.Text('djs',
-                      style: simpleText),
-                ),
-                pw.Container(
-                  width: 100,
-                  child: pw.Text('lights', style: simpleText),
-                ),
-                pw.Container(
-                  width: 50,
-                  child: pw.Text('20000', style: simpleText),
-                ),
-                pw.Container(
-                  width: 50,
-                  child: pw.Text('3', style: simpleText),
-                ),
-                pw.Container(
-                  width: 70,
-                  child: pw.Text('10', style: simpleText),
-                ),
-                pw.Container(
-                  width: 70,
-                  child: pw.Text('30000', style: simpleText),
-                ),
-              ],
-            ),
-            pw.SizedBox(height: 10),
-            pw.Divider(
-              thickness: 1,
-              color: PdfColors.grey,
-            ),
-            pw.SizedBox(height: 30),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: pw.CrossAxisAlignment.end,
-              children: [
-                pw.Container(),
-                pw.Row(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text('Subtotal :', style: boldText),
-                        pw.Text('Discount :', style: boldText),
-                        pw.Text('Tax :', style: boldText),
-                        pw.Text('Additional tax :', style: boldText),
-                      ],
-                    ),
-                    pw.SizedBox(width: 20),
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text('20000', style: simpleText),
-                        pw.Text('1000', style: simpleText),
-                        pw.Text('500', style: simpleText),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            pw.SizedBox(height: 10),
-            pw.Divider(
-              thickness: 1,
-              color: PdfColors.black,
-              indent: 300,
-            ),
-            pw.SizedBox(height: 10),
-            pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: pw.CrossAxisAlignment.end,
-              children: [
-                pw.Row(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.SizedBox(width: 310),
-                    pw.Text('Balance :', style: boldText),
-                    pw.SizedBox(width: 58),
-                    pw.Text('30000', style: simpleText),
-                  ],
-                ),
-              ],
-            ),
-            pw.Spacer(),
-            pw.Divider(
-              thickness: 1,
-              color: PdfColors.black,
-            ),
-            pw.SizedBox(height: 30),
-            pw.Align(
-              alignment: pw.Alignment.bottomCenter,
-              child: pw.Text(
-                'Thanks harshil for you order!',
-                style: const pw.TextStyle(
-                  fontSize: 19,
-                  color: PdfColors.black,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    ),
-  );
-  return pdf.save();
-}
-
 Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
   final pdf = pw.Document();
   final totalAmount = int.parse(data['totalRent'])-int.parse(data['advanced']);
   DateTime currentDate = DateTime.now();
   final image = pw.MemoryImage
-    ((await rootBundle.load('assets/images/srdj.png')).buffer.asUint8List());
+    ((await rootBundle.load('assets/images/poster.png')).buffer.asUint8List());
   pdf.addPage(
     pw.Page(
       build: (pw.Context context) {
@@ -345,12 +95,8 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
               )
               ),
             ),
-            pw.SizedBox(height: 50),
-            // pw.Divider(
-            //   thickness: 1,
-            //   color: PdfColors.black,
-            // ),
-            pw.SizedBox(height: 65),
+            pw.SizedBox(height: 80),
+            // pw.SizedBox(height: 65),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -359,44 +105,46 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                   children: [
                     pw.Text('From :', style: boldText),
                     pw.SizedBox(height: 10),
-                    pw.Text('SR sound', style: simpleText),
+                    pw.Text('SR SOUND ', style: simpleText),
                     pw.Container(
                       width: 200,
-                      child: pw.Text('surat', style: simpleText),
+                      child: pw.Text('Sarthana jakat naka surat, 395006', style: simpleText),
                     ),
                     pw.Text('+919328088008', style: simpleText),
-                    pw.Text('srsounds@gmail.com', style: simpleText),
+                    pw.Text('Khenimukesh188@gmail.com', style: simpleText),
                   ],
                 ),
-                pw.Row(
+                pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Container(
-                      height: 60,
-                      width: 60,
+                      height: 72,
+                      width: 72,
                       color: PdfColors.black,
-                      child: pw.Image(image, fit: pw.BoxFit.cover),
+                      child: pw.Image(image, fit: pw.BoxFit.fill),
                     ),
-                    pw.SizedBox(width: 10),
-                    pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text(
-                          'SR sound',
-                          style: pw.TextStyle(
-                            color: PdfColors.black,
-                            fontWeight: pw.FontWeight.bold,
-                            fontSize: 23,
-                          ),
-                        ),
-                        pw.Text(
-                          'surat',
-                          style: const pw.TextStyle(
-                            color: PdfColors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
+                    pw.SizedBox(width: 40),
+                    // pw.Column(
+                    //   crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    //   children: [
+                    //     pw.Text(
+                    //       'SR sound',
+                    //       style: pw.TextStyle(
+                    //         color: PdfColors.black,
+                    //         fontWeight: pw.FontWeight.bold,
+                    //         fontSize: 23,
+                    //       ),
+                    //     ),
+                    //     pw.Text(
+                    //       'surat',
+                    //       style: const pw.TextStyle(
+                    //         color: PdfColors.black,
+                    //         fontSize: 18,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ],
@@ -413,6 +161,10 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                     pw.SizedBox(height: 10),
                     pw.Text(data['name'], style: simpleText),
                     pw.Text('india', style: simpleText),
+                    // pw.Text(data['address'], style: const pw.TextStyle(
+                    //   color: PdfColors.black,
+                    //   fontSize: 12,
+                    // )),
                   ],
                 ),
                 pw.Row(
@@ -431,7 +183,7 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                       mainAxisAlignment: pw.MainAxisAlignment.start,
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('01', style: simpleText),
+                        pw.Text(data['invoiceId'].toString(), style: simpleText),
                         pw.Text('${currentDate.day}-${currentDate.month}-${currentDate.year}', style: simpleText),
                         pw.Text(data['date'], style: simpleText),
                       ],

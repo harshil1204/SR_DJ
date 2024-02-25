@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:untitled1/resouces/colors.dart';
 import 'package:untitled1/resouces/text.dart';
-import 'package:untitled1/ui/homepage.dart';
+
+int? invoiceID;
 
 class AddBill extends StatefulWidget {
   const AddBill({super.key});
@@ -32,7 +33,7 @@ class _AddBillState extends State<AddBill> {
       String totalRent,
       String dateTime) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+      invoiceID=invoiceID! + 1;
     try {
       await firestore.collection('Bill').add({
         // 'id':widget.catId,
@@ -47,14 +48,24 @@ class _AddBillState extends State<AddBill> {
         'tempaRent':0,
         'operatorCost':0,
         'extraCost':0,
+        'invoiceId':invoiceID,
         'time': DateTime.now(),
-        // Add more fields related to the category if needed
       });
 
       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage(),));
     } catch (e) {
       if (kDebugMode) {
         print('Error adding bill: $e');
+      }
+    }
+
+    try {
+      await firestore.collection('invoice').doc("bmuy2cffDqd9ZqAJSVdf").set({
+        'invoiceId':invoiceID,
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding invoice ID: $e');
       }
     }
   }
@@ -80,6 +91,7 @@ class _AddBillState extends State<AddBill> {
 
   @override
   void initState() {
+    getInvoiceId();
     _dateTimeController.text = "";
     super.initState();
   }
@@ -170,7 +182,6 @@ class _AddBillState extends State<AddBill> {
                     String items = _itemController.text.trim();
                     String advancedRent = _advancedRentController.text.trim();
                     String totalRent = _totalRentController.text.trim();
-                    String pendingRent = _pendingRentController.text.trim();
                     String dateTime = _dateTimeController.text.trim();
                     if(addressName.isNotEmpty &&
                         items.isNotEmpty &&
@@ -209,4 +220,13 @@ class _AddBillState extends State<AddBill> {
       ),
     );
   }
+}
+
+
+Future<void> getInvoiceId()async{
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+
+  final invoice = await firebaseFirestore.collection('invoice').get();
+  invoiceID=invoice.docs.first['invoiceId'];
+  print(invoice.docs.first['invoiceId']);
 }
