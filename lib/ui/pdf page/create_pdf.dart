@@ -94,7 +94,7 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
   final totalAmount = int.parse(data['totalRent'])-int.parse(data['advanced']);
   DateTime currentDate = DateTime.now();
   final image = pw.MemoryImage
-    ((await rootBundle.load('assets/images/poster.png')).buffer.asUint8List());
+    ((await rootBundle.load('assets/images/newPoster.jpeg')).buffer.asUint8List());
   pdf.addPage(
     pw.Page(
       build: (pw.Context context) {
@@ -120,6 +120,7 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
             // pw.SizedBox(height: 65),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -137,15 +138,15 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                 ),
                 pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  // crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
                     pw.Container(
-                      height: 72,
-                      width: 72,
+                      height: 60,
+                      width: 140,
                       color: PdfColors.black,
                       child: pw.Image(image, fit: pw.BoxFit.fill),
                     ),
-                    pw.SizedBox(width: 40),
+                    // pw.SizedBox(width: 40),
                   ],
                 ),
               ],
