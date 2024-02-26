@@ -99,5 +99,10 @@ flutter:
           weight: 400
         - asset: assets/fonts/Outfit-Light.ttf
           weight: 300
+
+    - family: NotoSansGujarati
+      fonts:
+        - asset: assets/fonts/NotoSansGujarati-Regular.ttf
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

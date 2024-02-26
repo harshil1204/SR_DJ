@@ -10,7 +10,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 var formatter = NumberFormat('#,##,000');
-
+ late var ttf;
 class CreatePdfPage extends StatefulWidget {
   var data;
   CreatePdfPage({Key? key,this.data}) : super(key: key);
@@ -22,6 +22,22 @@ class CreatePdfPage extends StatefulWidget {
 class _CreatePdfPageState extends State<CreatePdfPage> {
   final pdf = pw.Document();
 
+
+  Future<void> setGuj()async{
+    final ByteData data11 = await rootBundle.load('assets/fonts/NotoSansGujarati-Regular.ttf');
+    ttf = pw.Font.ttf(data11.buffer.asByteData());
+  }
+
+  @override
+  void didChangeDependencies() async{
+
+    super.didChangeDependencies();
+  }
+  @override
+  void initState() {
+    setGuj();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,16 +59,19 @@ pw.TextStyle boldText = pw.TextStyle(
   color: PdfColors.black,
   fontWeight: pw.FontWeight.bold,
   fontSize: 14,
+  font: ttf,
 );
 pw.TextStyle boldTextTitle = pw.TextStyle(
   color: PdfColors.white,
   fontWeight: pw.FontWeight.bold,
   fontSize: 14,
+  font: ttf,
 );
 
-pw.TextStyle simpleText = const pw.TextStyle(
+pw.TextStyle simpleText =  pw.TextStyle(
   color: PdfColors.black,
   fontSize: 14,
+  font: ttf,
 );
 
 pw.Widget buildTitles(var data){
@@ -70,6 +89,7 @@ pw.Widget buildItems(var data,int value){
 }
 
 Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
+
   final pdf = pw.Document();
   final totalAmount = int.parse(data['totalRent'])-int.parse(data['advanced']);
   DateTime currentDate = DateTime.now();
@@ -91,6 +111,7 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                   style: pw.TextStyle(
                   color: PdfColors.white,
                   fontSize: 28,
+                  font: ttf,
                   fontWeight: pw.FontWeight.bold
               )
               ),
@@ -105,7 +126,7 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                   children: [
                     pw.Text('From :', style: boldText),
                     pw.SizedBox(height: 10),
-                    pw.Text('SR SOUND ', style: simpleText),
+                    pw.Text('SR SOUND', style: simpleText),
                     pw.Container(
                       width: 200,
                       child: pw.Text('Sarthana jakat naka surat, 395006', style: simpleText),
@@ -125,26 +146,6 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                       child: pw.Image(image, fit: pw.BoxFit.fill),
                     ),
                     pw.SizedBox(width: 40),
-                    // pw.Column(
-                    //   crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    //   children: [
-                    //     pw.Text(
-                    //       'SR sound',
-                    //       style: pw.TextStyle(
-                    //         color: PdfColors.black,
-                    //         fontWeight: pw.FontWeight.bold,
-                    //         fontSize: 23,
-                    //       ),
-                    //     ),
-                    //     pw.Text(
-                    //       'surat',
-                    //       style: const pw.TextStyle(
-                    //         color: PdfColors.black,
-                    //         fontSize: 18,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ],
@@ -256,13 +257,13 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                 ),
               ],
             ),
-            pw.SizedBox(height: 5),
+            // pw.SizedBox(height: 5),
             pw.Divider(
               thickness: 1,
               color: PdfColors.black,
               indent: 330,
             ),
-            pw.SizedBox(height: 5),
+            // pw.SizedBox(height: 5),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.end,
               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -272,13 +273,13 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
                   children: [
                     pw.Container(),
                     pw.Text('Balance :', style: boldText),
-                    pw.SizedBox(width: 54),
+                    pw.SizedBox(width: 48),
                     pw.Text(formatter.format(totalAmount), style: simpleText),
                   ],
                 ),
               ],
             ),
-            pw.SizedBox(height: 40),
+            pw.SizedBox(height: 25),
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.end,
               children: [
@@ -314,13 +315,15 @@ Future<Uint8List> generateCenteredTextWithOriginal(var data) async {
               thickness: 1,
               color: PdfColors.black,
             ),
-            pw.SizedBox(height: 30),
+            pw.Spacer(),
+            // pw.SizedBox(height: 20),
             pw.Align(
               alignment: pw.Alignment.bottomCenter,
               child: pw.Text(
                 'Thanks ${data['name'].split(' ')[0]} for you order!',
                 style: pw.TextStyle(
                   fontSize: 19,
+                  font: ttf,
                   color: PdfColor.fromHex("#043C7A")
                 ),
               ),
